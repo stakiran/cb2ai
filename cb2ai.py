@@ -14,7 +14,7 @@ def parse_args():
         description="クリップボード内容をOpenAI APIに送信して結果をMarkdownファイルで開く"
     )
     parser.add_argument("--prompt", "-p", required=True, help="プロンプトファイルのパス")
-    parser.add_argument("--model", "-m", default="gpt-3.5-turbo", help="使用するモデル名")
+    parser.add_argument("--model", "-m", default="gpt-4o", help="使用するモデル名")
     parser.add_argument("--timeout", "-t", type=int, default=130, help="APIリクエストのタイムアウト(秒)")
     return parser.parse_args()
 
@@ -51,9 +51,11 @@ def main():
 
     # %cb% を置換
     prompt = prompt_template.replace("%cb%", cb_content)
+    prompt = prompt.replace("\r\n", "\n").replace("\r", "\n")
 
     # OpenAI API 呼び出し
     result_text = request_to_model(args.model, prompt, args.timeout)
+    out_text = f'{prompt}\n\n{result_text}'
 
     # Markdownファイル作成
     temp_dir = tempfile.gettempdir()
@@ -61,7 +63,7 @@ def main():
     filepath = os.path.join(temp_dir, filename)
     try:
         with open(filepath, "w", encoding="utf-8") as f:
-            f.write(result_text)
+            f.write(out_text)
     except Exception as e:
         print(f"ファイル書き込みに失敗しました: {e}", file=sys.stderr)
         sys.exit(1)
