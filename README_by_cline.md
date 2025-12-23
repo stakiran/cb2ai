@@ -1,3 +1,7 @@
+# 🐰gpt-o4-miniだからAPI周りが振るい（API keyは今は`sk-`じゃないとか）……
+
+---
+
 # cb2ai
 
 クリップボード内容を OpenAI Chat Completions API に送信し、結果を Markdown ファイルに書き込んでブラウザ（または既定のビューア）で開く Python スクリプト。
